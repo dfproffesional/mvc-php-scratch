@@ -21,12 +21,9 @@ spl_autoload_register(function ($class) {
     // document root
     $documentRoot = "/app";
     
-    // edit prefix
-    $documentRoot = "$documentRoot/".strtolower($prefix);
-    
     // validate if custom $prefix can be match with a directory
-    $validate = preg_match(strtolower("/$prefix/"), $documentRoot) !== 1;
-    
+    $validate = preg_match("/$prefix/", $class) !== 1;
+
     // if exist 
     if ($validate){
         return;
@@ -35,8 +32,10 @@ spl_autoload_register(function ($class) {
     // replace the namespace prefix with the base directory, replace namespace
     // separators with directory separators in the relative class name, append
     // with .php
-    $file =  $documentRoot . str_replace("$prefix\\", '/', $class) . '.php';
-    
+    $classList = explode("\\",$class);
+    $className = array_pop($classList);
+    $file =  "$documentRoot/".strtolower(join("/",$classList))."/$className.php";
+
     // if the file exists, require it
     if (file_exists($file)) {
         require $file;

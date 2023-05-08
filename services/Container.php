@@ -29,6 +29,15 @@ class Container
 
     /**
      * @param class $class
+     * @return void
+     */
+    protected function appendDependence($class){
+        array_push($this->deps, $class);
+        $this->methods[$class] = (new ReflectionObject(new $class()))->getMethods();
+    }
+
+    /**
+     * @param class $class
      * @param function string
      * @return void
      */
