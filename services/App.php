@@ -18,7 +18,7 @@ class App extends Container
     private function setDeps()
     {
         $this->deps = [
-            Environment::class,
+            Router::class,
             ErrorHandler::class,
         ];
     }
@@ -27,7 +27,7 @@ class App extends Container
      * @return void
      */
     public function defaultConfig(){
-        $this->makeDI(Environment::class, 'readFile');
         $this->makeDI(ErrorHandler::class, 'displayErrors');
+        $this->makeDI(Router::class,'getPartsUri');
     }
 }

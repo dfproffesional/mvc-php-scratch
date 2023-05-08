@@ -1,4 +1,7 @@
 <?php
+
+require_once __DIR__."/environment.php";
+
 /**
  * An example of a project-specific implementation.
  *
@@ -19,7 +22,7 @@ spl_autoload_register(function ($class) {
         : $class;
     
     // document root
-    $documentRoot = "/app";
+    $documentRoot = __ROOT_DIR__;
     
     // validate if custom $prefix can be match with a directory
     $validate = preg_match("/$prefix/", $class) !== 1;
