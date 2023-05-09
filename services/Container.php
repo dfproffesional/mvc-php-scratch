@@ -10,20 +10,20 @@ use ReflectionObject;
  */
 class Container
 {
-    protected $deps = [];
+    protected static $deps = [];
 
-    protected $methods;
+    protected static $methods;
 
     /**
      * @return void
      */
-    protected function setMultipleMethods()
+    protected static function setMultipleMethods()
     {
-        foreach ($this->deps as $class) {
+        foreach (Container::$deps as $class) {
             $getInstance = new $class();
             $reflectionObject = new ReflectionObject($getInstance);
             
-            $this->methods[$class] = $reflectionObject->getMethods();
+            Container::$methods[$class] = $reflectionObject->getMethods();
         }
     }
 
@@ -31,9 +31,9 @@ class Container
      * @param class $class
      * @return void
      */
-    protected function appendDependence($class){
-        array_push($this->deps, $class);
-        $this->methods[$class] = (new ReflectionObject(new $class()))->getMethods();
+    protected static function appendDependence($class){
+        array_push(Container::$deps, $class);
+        Container::$methods[$class] = (new ReflectionObject(new $class()))->getMethods();
     }
 
     /**
@@ -41,10 +41,10 @@ class Container
      * @param function string
      * @return void
      */
-    protected function makeDI($class,$function)
+    protected static function makeDI($class,$function)
     {
         $method = array_filter(
-            $this->methods[$class], 
+            Container::$methods[$class], 
             fn($method)=> $method->name == $function 
         );
         $key = array_key_first($method);
@@ -60,14 +60,14 @@ class Container
     /**
      * @return void
      */
-    protected function makeAutomaticDI()
+    protected static function makeAutomaticDI()
     {
-        foreach ($this->methods as $class => $methods) {
+        foreach (Container::$methods as $class => $methods) {
             foreach ($methods as $method) {
                 $args = array_map(fn($param) => new ($param->getType()->getName())(),$method->getParameters());
                 $method->invoke(new $class(), ...$args);
             }
         }
-        $this->makeDI(Example::class,'go');
+        Container::makeDI(Example::class,'go');
     }
 }

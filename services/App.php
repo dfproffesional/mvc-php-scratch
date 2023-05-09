@@ -7,17 +7,17 @@ class App extends Container
 
     public function __construct()
     {
-        $this->setDeps();
-        $this->setMultipleMethods();
-        $this->defaultConfig();
+        App::setDeps();
+        App::setMultipleMethods();
+        App::defaultConfig();
     }
 
     /**
      * @return void
      */
-    private function setDeps()
+    private static function setDeps()
     {
-        $this->deps = [
+        App::$deps = [
             Router::class,
             ErrorHandler::class,
         ];
@@ -26,8 +26,8 @@ class App extends Container
     /**
      * @return void
      */
-    public function defaultConfig(){
-        $this->makeDI(ErrorHandler::class, 'displayErrors');
-        $this->makeDI(Router::class,'getPartsUri');
+    private static function defaultConfig(){
+        App::makeDI(ErrorHandler::class, 'displayErrors');
+        App::makeDI(Router::class,'setStaticData');
     }
 }
