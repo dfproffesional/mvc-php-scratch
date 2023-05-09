@@ -28,6 +28,6 @@ class App extends Container
      */
     private static function defaultConfig(){
         App::makeDI(ErrorHandler::class, 'displayErrors');
-        App::makeDI(Router::class,'setStaticData');
+        App::makeDI(Router::class,'boot');
     }
 }

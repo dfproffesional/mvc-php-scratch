@@ -16,12 +16,37 @@ class Router extends Container
     public static $prefix;
 
     /**
+     * @param string $method
      * @return void
      */
-    public function setStaticData(HttpRequest $serv){
-        Router::$methodUri = $serv->getMethod();
-        Router::$uri = $serv->getUri();
+    private function setMethodUri($method){
+        Router::$methodUri = $method;
     }
+
+    /**
+     * @param string $uri
+     * @return void
+     */
+    private function setUri($uri){
+        Router::$uri = $uri;
+    }
+
+    /**
+     * @param string $filename
+     * @return void
+     */
+    private function importRoutes($filename){
+        require_once(__ROUTES_DIR__."/$filename");
+    }
+
+    /**
+     * @return void
+     */
+     public function boot(HttpRequest $serv){
+        $this->setMethodUri($serv->getMethod());
+        $this->setUri($serv->getUri());
+        $this->importRoutes("api.php");
+     }
 
     /**
      * @return void
